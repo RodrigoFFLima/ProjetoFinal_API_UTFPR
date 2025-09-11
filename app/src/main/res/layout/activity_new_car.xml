@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".NewItemActivity">
+    tools:context=".NewCarActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -32,25 +32,15 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/surname"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:hint="Surname"
-        app:layout_constraintStart_toStartOf="@id/name"
-        app:layout_constraintEnd_toEndOf="@id/name"
-        app:layout_constraintTop_toBottomOf="@id/name" />
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/age"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:id="@+id/year"
+        android:layout_width="149dp"
+        android:layout_height="48dp"
         android:layout_marginStart="12dp"
-        android:hint="Age"
+        android:layout_marginTop="12dp"
+        android:hint="Year"
+        android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/surname"
-        android:inputType="number" />
+        app:layout_constraintTop_toBottomOf="@id/name" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/imageUrl"
@@ -60,7 +50,7 @@
         android:hint="Image URL"
         app:layout_constraintStart_toStartOf="@id/name"
         app:layout_constraintEnd_toEndOf="@id/name"
-        app:layout_constraintTop_toBottomOf="@id/age" />
+        app:layout_constraintTop_toBottomOf="@id/year" />
 
     <ImageButton
         android:id="@+id/takePictureCta"
@@ -82,13 +72,14 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/profession"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:hint="Profession"
-        app:layout_constraintStart_toStartOf="@id/name"
+        android:id="@+id/licence"
+        android:layout_width="217dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="8dp"
+        android:hint="Licence"
         app:layout_constraintEnd_toEndOf="@id/name"
+        app:layout_constraintHorizontal_bias="0.065"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/takePictureCta" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -98,7 +89,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/profession"
+        app:layout_constraintTop_toBottomOf="@id/licence"
         app:layout_constraintBottom_toTopOf="@id/saveCta"
         tools:visibility="visible">
 

@@ -21,9 +21,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
-import com.example.whereisthecar.databinding.ActivityNewItemBinding
-import com.example.whereisthecar.model.ItemLocation
-import com.example.whereisthecar.model.ItemValue
+import com.example.whereisthecar.databinding.ActivityNewCarBinding
+import com.example.whereisthecar.model.Car
+import com.example.whereisthecar.model.CarLocation
 import com.example.whereisthecar.service.RetrofitClient
 import com.example.whereisthecar.service.safeApiCall
 import com.example.whereisthecar.service.Result
@@ -48,9 +48,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.UUID
 
-class NewItemActivity : AppCompatActivity(), OnMapReadyCallback {
+class NewCarActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private lateinit var binding: ActivityNewItemBinding
+    private lateinit var binding: ActivityNewCarBinding
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var imageUri: Uri
@@ -68,7 +68,7 @@ class NewItemActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityNewItemBinding.inflate(layoutInflater)
+        binding = ActivityNewCarBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -164,7 +164,7 @@ class NewItemActivity : AppCompatActivity(), OnMapReadyCallback {
 
         return FileProvider.getUriForFile(
             this,
-            "com.example.minhaprimeiraapi.fileprovider",// applicationId + .provider
+            "com.example.whereisthecar.fileprovider",// applicationId + .provider
             imageFile!!
         )
     }
@@ -176,12 +176,11 @@ class NewItemActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun saveData() {
         val name = binding.name.text.toString()
-        val surname = binding.surname.text.toString()
-        val age = binding.age.text.toString().toInt()
-        val profession = binding.profession.text.toString()
+        val year = binding.year.text.toString()
+        val licence = binding.licence.text.toString()
         val imageUrl = binding.imageUrl.text.toString()
-        val location = selectedMarker?.position?.let { position ->
-            ItemLocation(
+        val place = selectedMarker?.position?.let { position ->
+            CarLocation(
                 position.latitude,
                 position.longitude,
                 name
@@ -189,21 +188,20 @@ class NewItemActivity : AppCompatActivity(), OnMapReadyCallback {
         } ?: throw IllegalArgumentException("Usuário deveria ter a localização nesse ponto.")
 
         CoroutineScope(Dispatchers.IO).launch {
-            val itemValue = ItemValue(
+            val carValue = Car(
                 SecureRandom().nextInt().toString(),
                 name,
-                surname,
-                profession,
+                licence,
                 imageUrl,
-                age,
-                location
+                year,
+                place
             )
-            val result = safeApiCall { RetrofitClient.apiService.addItem(itemValue) }
+            val result = safeApiCall { RetrofitClient.apiService.addCar(carValue) }
             withContext(Dispatchers.Main) {
                 when (result) {
                     is Result.Error -> {
                         Toast.makeText(
-                            this@NewItemActivity,
+                            this@NewCarActivity,
                             R.string.error_create,
                             Toast.LENGTH_SHORT
                         ).show()
@@ -211,18 +209,11 @@ class NewItemActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     is Result.Success -> {
                         Toast.makeText(
-                            this@NewItemActivity,
+                            this@NewCarActivity,
                             getString(R.string.success_create, name),
                             Toast.LENGTH_SHORT
                         ).show()
                         finish()
-                    }
-
-                    is com.example.whereisthecar.service.Result.Error -> {
-                        TODO()
-                    }
-                    is com.example.whereisthecar.service.Result.Success<*> -> {
-                        TODO()
                     }
                 }
             }
@@ -238,26 +229,18 @@ class NewItemActivity : AppCompatActivity(), OnMapReadyCallback {
             ).show()
             return false
         }
-        if (binding.surname.text.toString().isBlank()) {
+        if (binding.year.text.toString().isBlank()) {
             Toast.makeText(
                 this,
-                getString(R.string.error_validate_form, "Surname"),
+                getString(R.string.error_validate_form, "Year"),
                 Toast.LENGTH_SHORT
             ).show()
             return false
         }
-        if (binding.age.text.toString().isBlank()) {
+        if (binding.licence.text.toString().isBlank()) {
             Toast.makeText(
                 this,
-                getString(R.string.error_validate_form, "Age"),
-                Toast.LENGTH_SHORT
-            ).show()
-            return false
-        }
-        if (binding.profession.text.toString().isBlank()) {
-            Toast.makeText(
-                this,
-                getString(R.string.error_validate_form, "Profession"),
+                getString(R.string.error_validate_form, "Licence"),
                 Toast.LENGTH_SHORT
             ).show()
             return false
@@ -347,6 +330,6 @@ class NewItemActivity : AppCompatActivity(), OnMapReadyCallback {
 
         const val REQUEST_CODE_CAMERA = 101
 
-        fun newIntent(context: Context) = Intent(context, NewItemActivity::class.java)
+        fun newIntent(context: Context) = Intent(context, NewCarActivity::class.java)
     }
 }

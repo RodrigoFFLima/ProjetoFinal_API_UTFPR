@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ItemDetailActivity">
+    tools:context=".CarDetailActivity">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -48,7 +48,7 @@
 
 
     <TextView
-        android:id="@+id/age"
+        android:id="@+id/year"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -61,12 +61,12 @@
 
 
     <EditText
-        android:id="@+id/profession"
+        android:id="@+id/licence"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        app:layout_constraintTop_toBottomOf="@id/age"
+        app:layout_constraintTop_toBottomOf="@id/year"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Engenheiro de Software" />
@@ -87,7 +87,7 @@
         android:visibility="gone"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
-        app:layout_constraintTop_toBottomOf="@id/profession"
+        app:layout_constraintTop_toBottomOf="@id/licence"
         app:layout_constraintBottom_toTopOf="@id/editCTA"
         tools:visibility="visible" >
 
@@ -108,7 +108,7 @@
         android:src="@android:drawable/ic_menu_save"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintStart_toStartOf="@id/profession"
+        app:layout_constraintStart_toStartOf="@id/licence"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline" />
 
@@ -121,7 +121,7 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintEnd_toEndOf="@id/profession"
+        app:layout_constraintEnd_toEndOf="@id/licence"
         android:src="@android:drawable/ic_menu_delete" />
 
 

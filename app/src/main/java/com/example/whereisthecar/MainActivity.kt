@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.whereisthecar.adapter.ItemAdapter
+import com.example.whereisthecar.adapter.CarAdapter
 import com.example.whereisthecar.database.DatabaseBuilder
 import com.example.whereisthecar.database.model.CarLocation
 import com.example.whereisthecar.databinding.ActivityMainBinding
@@ -101,20 +101,32 @@ class MainActivity : AppCompatActivity() {
         fusedLocationProviderClient.lastLocation.addOnCompleteListener { task: Task<Location> ->
             if (task.isSuccessful) {
                 val location = task.result
-                Log.d("Hello World", "Lat: ${location.latitude} Long: ${location.longitude}")
-                val carLocation =
-                    CarLocation(latitude = location.latitude, longitude = location.longitude)
+                if (location != null) {
+                    Log.d("Hello World", "Lat: ${location.latitude} Long: ${location.longitude}")
+                    val carLocation = CarLocation(
+                        latitude = location.latitude,
+                        longitude = location.longitude
+                    )
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    DatabaseBuilder.getInstance()
-                        .carLocationDao()
-                        .insert(carLocation)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        DatabaseBuilder.getInstance()
+                            .carLocationDao()
+                            .insert(carLocation)
+                    }
+                } else {
+                    // Se não tem localização ainda (primeira vez, GPS off, etc)
+                    Toast.makeText(
+                        this,
+                        "Localização indisponível no momento. Tente novamente.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } else {
                 Toast.makeText(this, R.string.unknown_error, Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     private fun setupView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
@@ -139,23 +151,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToNewItem() {
-        startActivity(NewItemActivity.newIntent(this))
+        startActivity(NewCarActivity.newIntent(this))
     }
 
     private fun fetchItems() {
         CoroutineScope(Dispatchers.IO).launch {
-            val result = safeApiCall { RetrofitClient.apiService.getItems() }
+            val result = safeApiCall { RetrofitClient.apiService.getCars() }
 
             withContext(Dispatchers.Main) {
                 binding.swipeRefreshLayout.isRefreshing = false
                 when (result) {
                     is Result.Success -> {
-                        val adapter = ItemAdapter(result.data) { item ->
-                            Log.d("Hello World", "Clicou no item ${item.value.name}")
-                            startActivity(ItemDetailActivity.newIntent(
-                                context = this@MainActivity,
-                                itemId = item.id
-                            ))
+                        val validCars = result.data.filterNotNull()
+
+                        val adapter = CarAdapter(validCars) { item ->
+                            Log.d("Hello World", "Clicou no item ${item.name}")
+                            startActivity(
+                                CarDetailActivity.newIntent(
+                                    context = this@MainActivity,
+                                    itemId = item.id
+                                )
+                            )
                         }
                         binding.recyclerView.adapter = adapter
                     }
