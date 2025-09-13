@@ -24,9 +24,9 @@ class CarAdapter(
     override fun onBindViewHolder(holder: CarViewHolder, position: Int) {
         val car = cars[position]
 
-        holder.name.text = car.name
+        holder.name.text = holder.itemView.context.getString(R.string.car_model, car.name.toString())
         holder.year.text = holder.itemView.context.getString(R.string.car_year, car.year.toString())
-        holder.address.text = car.place?.name ?: "Sem endereço"
+        holder.licence.text = holder.itemView.context.getString(R.string.car_licence, car.licence.toString())
         holder.imageView.loadUrl(car.imageUrl)
 
         holder.itemView.setOnClickListener {
@@ -40,6 +40,6 @@ class CarAdapter(
         val imageView: ImageView = view.findViewById(R.id.image)
         val name: TextView = view.findViewById(R.id.name)
         val year: TextView = view.findViewById(R.id.year)
-        val address: TextView = view.findViewById(R.id.address)
+        val licence: TextView = view.findViewById(R.id.licence)
     }
 }

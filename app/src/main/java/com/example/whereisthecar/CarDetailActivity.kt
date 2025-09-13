@@ -168,7 +168,7 @@ class CarDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun handleSuccess() {
         binding.name.text = car.name ?: "-"
         binding.year.text = getString(R.string.car_year, car.year ?: "-")
-        binding.licence.setText(car.licence ?: "")
+        binding.licence.setText(getString(R.string.car_licence, car.licence ?: "-"))
         car.imageUrl?.let { binding.image.loadUrl(it) }
 
         loadItemLocationInGoogleMap()

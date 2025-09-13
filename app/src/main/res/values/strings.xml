@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Where is the Car?</string>
     <string name="car_year">Ano: %1$s</string>
+    <string name="car_model">Modelo: %1$s</string>
+    <string name="car_licence">Placa: %1$s</string>
     <string name="error_delete">Erro ao deletar o carro</string>
     <string name="success_delete">Carro deletado com sucesso</string>
     <string name="error_request_location_permission">Permissão de localização negada!</string>

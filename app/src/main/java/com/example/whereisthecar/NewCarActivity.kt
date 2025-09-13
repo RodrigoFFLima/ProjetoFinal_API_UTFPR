@@ -221,6 +221,7 @@ class NewCarActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun validateForm(): Boolean {
+        // Validação do campo Name
         if (binding.name.text.toString().isBlank()) {
             Toast.makeText(
                 this,
@@ -229,7 +230,10 @@ class NewCarActivity : AppCompatActivity(), OnMapReadyCallback {
             ).show()
             return false
         }
-        if (binding.year.text.toString().isBlank()) {
+
+        // Validação do campo Year
+        val yearText = binding.year.text.toString()
+        if (yearText.isBlank()) {
             Toast.makeText(
                 this,
                 getString(R.string.error_validate_form, "Year"),
@@ -237,7 +241,18 @@ class NewCarActivity : AppCompatActivity(), OnMapReadyCallback {
             ).show()
             return false
         }
-        if (binding.licence.text.toString().isBlank()) {
+        if (!YEAR_PATTERN.matches(yearText)) {
+            Toast.makeText(
+                this,
+                "Formato de ano inválido. Use AAAA/AAAA.",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        }
+
+        // Validação do campo Licence
+        val licenceText = binding.licence.text.toString()
+        if (licenceText.isBlank()) {
             Toast.makeText(
                 this,
                 getString(R.string.error_validate_form, "Licence"),
@@ -245,6 +260,16 @@ class NewCarActivity : AppCompatActivity(), OnMapReadyCallback {
             ).show()
             return false
         }
+        if (!LICENCE_PATTERN.matches(licenceText)) {
+            Toast.makeText(
+                this,
+                "Formato de placa inválido. Use AAA-1234.",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        }
+
+        // Validação do campo Image URL
         if (binding.imageUrl.text.toString().isBlank()) {
             Toast.makeText(
                 this,
@@ -253,6 +278,7 @@ class NewCarActivity : AppCompatActivity(), OnMapReadyCallback {
             ).show()
             return false
         }
+
         if (selectedMarker == null) {
             Toast.makeText(
                 this,
@@ -329,6 +355,9 @@ class NewCarActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
 
         const val REQUEST_CODE_CAMERA = 101
+
+        private val YEAR_PATTERN = Regex("""\d{4}/\d{4}""")
+        private val LICENCE_PATTERN = Regex("""[A-Z]{3}-\d{4}""")
 
         fun newIntent(context: Context) = Intent(context, NewCarActivity::class.java)
     }
